@@ -24,12 +24,12 @@ public class EventBus
     [ClientRpc]
     static void ServerToClientRpc(GameEvent toInvoke, ulong callbackSourceID)
     {
-        toInvoke.Invoke(callbackSource, LogicalSide.CLIENT);//invoke on client
+        toInvoke.Invoke(callbackSourceID, LogicalSide.CLIENT);//invoke on client
     }
 
     [ServerRpc]
     static void ClientToServerRpc(GameEvent toInvoke, ulong callbackSourceID)
     {
-        toInvoke.Invoke(callbackSource, LogicalSide.SERVER);//invoke on server
+        toInvoke.Invoke(callbackSourceID, LogicalSide.SERVER);//invoke on server
     }
 }
