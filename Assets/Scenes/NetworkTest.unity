@@ -263,12 +263,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   DontDestroy: 1
   RunInBackground: 1
-  LogLevel: 1
+  LogLevel: 0
   NetworkConfig:
     ProtocolVersion: 0
     NetworkTransport: {fileID: 1317077064}
     RegisteredScenes:
-    - 
+    - NetworkTest
     AllowRuntimeSceneChanges: 0
     NetworkPrefabs:
     - Prefab: {fileID: 3890796742678773519, guid: 63ec6c0abfbfa4a4aaf7dfa81829d695, type: 3}
