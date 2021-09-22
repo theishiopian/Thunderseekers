@@ -10,25 +10,25 @@ public enum LogicalSide
     SERVER
 }
 
-public delegate void GameEvent(object callbackSource, LogicalSide sideCalledFrom); 
+public delegate void GameEvent(ulong callbackSourceID, LogicalSide sideCalledFrom); 
 public class EventBus
 {
     public static GameEvent testEvent;
 
-    public static void Invoke(GameEvent toInvoke, object callbackSource)
+    public static void Invoke(GameEvent toInvoke, ulong callbackSourceID)
     {
-        ClientToServerRpc(toInvoke, callbackSource);
-        ServerToClientRpc(toInvoke, callbackSource);
+        ClientToServerRpc(toInvoke, callbackSourceID);
+        ServerToClientRpc(toInvoke, callbackSourceID);
     }
 
     [ClientRpc]
-    static void ServerToClientRpc(GameEvent toInvoke, object callbackSource)
+    static void ServerToClientRpc(GameEvent toInvoke, ulong callbackSourceID)
     {
         toInvoke.Invoke(callbackSource, LogicalSide.CLIENT);//invoke on client
     }
 
     [ServerRpc]
-    static void ClientToServerRpc(GameEvent toInvoke, object callbackSource)
+    static void ClientToServerRpc(GameEvent toInvoke, ulong callbackSourceID)
     {
         toInvoke.Invoke(callbackSource, LogicalSide.SERVER);//invoke on server
     }
