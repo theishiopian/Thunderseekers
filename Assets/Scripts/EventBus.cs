@@ -15,20 +15,10 @@ public class EventBus
 {
     public static GameEvent testEvent;
 
-    public static void Invoke(GameEvent toInvoke, object callbackSource, LogicalSide sideCalledFrom)
+    public static void Invoke(GameEvent toInvoke, object callbackSource)
     {
-        toInvoke.Invoke(callbackSource, sideCalledFrom);
-
-        if(sideCalledFrom == LogicalSide.CLIENT)
-        {
-            //invoke on server
-            ClientToServerRpc(toInvoke, callbackSource);
-        }
-        else
-        {
-            //invoke on client
-            ServerToClientRpc(toInvoke, callbackSource);
-        }
+        ClientToServerRpc(toInvoke, callbackSource);
+        ServerToClientRpc(toInvoke, callbackSource);
     }
 
     [ClientRpc]
