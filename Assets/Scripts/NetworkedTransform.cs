@@ -24,4 +24,20 @@ public class NetworkedTransform : NetworkBehaviour
             syncRot.Value = transform.rotation;
         }
     }
+
+    public void SetPosition(Vector3 position)
+    {
+        if(!IsClient)
+        {
+            transform.position = position;
+        }
+    }
+
+    public void SetRotation(Quaternion rotation)
+    {
+        if (!IsClient)
+        {
+            transform.rotation = rotation;
+        }
+    }
 }
