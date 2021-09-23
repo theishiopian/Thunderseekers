@@ -6,6 +6,9 @@ using UnityEngine;
 
 public delegate void GameEvent(ulong ID, bool isClient);
 
+/// <summary>
+/// This system is used for communication across the server and the client
+/// </summary>
 public class EventSystem : NetworkBehaviour
 {
     private static event GameEvent testEvent;
@@ -16,17 +19,7 @@ public class EventSystem : NetworkBehaviour
 
     private static EventSystem singleton;
 
-    public static EventSystem Singleton
-    {
-        get
-        {
-            return singleton;
-        }
-        private set
-        {
-
-        }
-    }
+    public GameObject testOb;
 
     private void Awake()
     {
@@ -45,20 +38,30 @@ public class EventSystem : NetworkBehaviour
             Invoke("test", NetworkObjectId);
         }
 
-        if(IsServer && !IsHost && Input.GetKeyDown(KeyCode.RightShift))
+        if(IsServer && Input.GetKeyDown(KeyCode.RightShift))
         {
             Invoke("test", NetworkObjectId);
         }
     }
 
-    //common invoke for everyone
-    public void Invoke(string toInvoke, ulong ID)
+    public static void Invoke(string toInvoke, ulong ID)
     {
-        if(!IsServer)//is client
+        singleton.DoInvoke(toInvoke, ID);
+    }
+
+    //common invoke for everyone
+    private void DoInvoke(string toInvoke, ulong ID)
+    {
+        if(!IsServer )//is client
         {
             ClientToServerRpc("test", ID, true);
         }
-        else//is server or host
+        else if(IsHost)
+        {
+            events[toInvoke]?.Invoke(ID, false);
+            ServerToClientRpc("test", ID, true);
+        }
+        else//is server
         {
             events[toInvoke]?.Invoke(ID, false);
             ServerToClientRpc("test", ID, true);//activate client event remotely
@@ -81,5 +84,6 @@ public class EventSystem : NetworkBehaviour
     private void test(ulong ID, bool isClient)
     {
         Debug.Log("Event from: " + ID + " " + isClient);
+        Destroy(testOb);
     }
 }
