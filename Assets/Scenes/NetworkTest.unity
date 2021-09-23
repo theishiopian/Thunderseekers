@@ -215,10 +215,11 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1230929747}
-  - component: {fileID: 1230929746}
   - component: {fileID: 1230929748}
+  - component: {fileID: 1230929746}
+  - component: {fileID: 1230929749}
   m_Layer: 0
-  m_Name: EventSystem
+  m_Name: Manager
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -236,7 +237,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f07ba44acb78f674da90a4ea2b889139, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  testOb: {fileID: 2080381147}
 --- !u!4 &1230929747
 Transform:
   m_ObjectHideFlags: 0
@@ -268,6 +268,18 @@ MonoBehaviour:
   PrefabHashGenerator: EventSystem
   AlwaysReplicateAsRoot: 0
   DontDestroyWithOwner: 0
+--- !u!114 &1230929749
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1230929745}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f51d99f524ac63a459f4e7f5eb15a95c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1317077063
 GameObject:
   m_ObjectHideFlags: 0
@@ -325,7 +337,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   DontDestroy: 1
   RunInBackground: 1
-  LogLevel: 0
+  LogLevel: 1
   NetworkConfig:
     ProtocolVersion: 0
     NetworkTransport: {fileID: 1317077064}

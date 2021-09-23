@@ -8,8 +8,14 @@ public delegate void GameEvent(ulong ID, bool isClient);
 
 /// <summary>
 /// This system is used for communication across the server and the client
+/// 
+/// To Access it, use NetworkEventSystem.Invoke("Event Name", networkID)
+/// 
+/// This will fire off an event on both the client and server, with a boolean valyue for if the event is clientside
+/// NOTE: on a host, the event will be fired twice, once for client, once for server
+/// Keep this in mind when writing code that needs to run on a host
 /// </summary>
-public class EventSystem : NetworkBehaviour
+public class NetworkEventSystem : NetworkBehaviour
 {
     private static event GameEvent testEvent;
     private static Dictionary<string, GameEvent> events = new Dictionary<string, GameEvent>()
@@ -17,9 +23,7 @@ public class EventSystem : NetworkBehaviour
         {"test", testEvent}
     };
 
-    private static EventSystem singleton;
-
-    public GameObject testOb;
+    private static NetworkEventSystem singleton;
 
     private void Awake()
     {
@@ -28,21 +32,21 @@ public class EventSystem : NetworkBehaviour
 
     private void Start()
     {
-        events["test"] += test;
+        //events["test"] += test;
     }
 
-    private void Update()
-    {
-        if(IsClient && Input.GetKeyDown(KeyCode.Space))
-        {
-            Invoke("test", NetworkObjectId);
-        }
+    //private void Update()
+    //{
+    //    if(IsClient && Input.GetKeyDown(KeyCode.Space))
+    //    {
+    //        Invoke("test", NetworkObjectId);
+    //    }
 
-        if(IsServer && Input.GetKeyDown(KeyCode.RightShift))
-        {
-            Invoke("test", NetworkObjectId);
-        }
-    }
+    //    if(IsServer && Input.GetKeyDown(KeyCode.RightShift))
+    //    {
+    //        Invoke("test", NetworkObjectId);
+    //    }
+    //}
 
     public static void Invoke(string toInvoke, ulong ID)
     {
@@ -79,11 +83,5 @@ public class EventSystem : NetworkBehaviour
     {
         events[toInvoke]?.Invoke(ID, isClient);
         ServerToClientRpc("test", ID, isClient);
-    }
-
-    private void test(ulong ID, bool isClient)
-    {
-        Debug.Log("Event from: " + ID + " " + isClient);
-        Destroy(testOb);
     }
 }
