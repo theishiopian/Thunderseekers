@@ -13,12 +13,12 @@ public class NetworkedTransform : NetworkBehaviour
 
     private void FixedUpdate()
     {
-        if(IsClient)
+        if(IsClient && !IsHost)
         {
             transform.position = syncPos.Value;
             transform.rotation = syncRot.Value;
         }
-        else
+        else if(IsServer || IsHost)
         {
             syncPos.Value = transform.position;
             syncRot.Value = transform.rotation;
