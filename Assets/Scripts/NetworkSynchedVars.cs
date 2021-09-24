@@ -5,6 +5,7 @@ using UnityEngine;
 /// <summary>
 /// this object is used as a container for any vars that need synching between client and server
 /// </summary>
+[RequireComponent(typeof(NetworkObject))]
 public class NetworkSynchedVars : NetworkBehaviour
 {
     private NetworkDictionary<ulong, Vector2> movementInput = new NetworkDictionary<ulong, Vector2>();

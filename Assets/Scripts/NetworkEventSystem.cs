@@ -15,6 +15,7 @@ public delegate void GameEvent(ulong ID, bool isClient);
 /// NOTE: on a host, the event will be fired twice, once for client, once for server
 /// Keep this in mind when writing code that needs to run on a host
 /// </summary>
+[RequireComponent(typeof(NetworkObject))]
 public class NetworkEventSystem : NetworkBehaviour
 {
     private static event GameEvent testEvent;

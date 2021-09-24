@@ -6,6 +6,7 @@ using UnityEngine;
 /// <summary>
 /// This component stores its transform data from the server/host and syncs it on the client
 /// </summary>
+[RequireComponent(typeof(NetworkObject))]
 public class NetworkedTransform : NetworkBehaviour
 {
     NetworkVariable<Vector3> syncPos = new NetworkVariable<Vector3>();
