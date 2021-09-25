@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 5931091247872462664}
   - component: {fileID: 971083711281596634}
+  - component: {fileID: 1277310128747633351}
   m_Layer: 0
   m_Name: Mech
   m_TagString: Untagged
@@ -48,3 +49,15 @@ MonoBehaviour:
   PrefabHashGenerator: Mech
   AlwaysReplicateAsRoot: 0
   DontDestroyWithOwner: 0
+--- !u!114 &1277310128747633351
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3890796742678773519}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 683407be3f777a94385ab601ef238201, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
