@@ -4,6 +4,7 @@ using UnityEngine;
 using MLAPI;
 using MatchUp;
 using MLAPI.Transports.UNET;
+using MLAPI.Serialization;
 
 public class MatchmakingMenu : MonoBehaviour
 {
@@ -19,7 +20,7 @@ public class MatchmakingMenu : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        //NetworkEventSystem.onJoinPre += OnJoinStart;
+        NetworkEventSystem.RegisterListner("start_join", OnJoinStart);
         matchmaker = NetworkManager.Singleton.GetComponent<Matchmaker>();
         matchmaker.GetMatchList(OnGetMatchList, 0, 10);
         transport = NetworkManager.Singleton.GetComponent<UNetTransport>();
@@ -28,16 +29,17 @@ public class MatchmakingMenu : MonoBehaviour
     /// <summary>
     /// Use this to join a game. The first parameter should be the index of the match array to use
     /// </summary>
-    void OnJoinStart(ulong ID, bool isClient, int index)
+    void OnJoinStart(ulong ID, bool isClient, INetworkSerializable eventData)
     {
+        JoinEvent joinEventData = (JoinEvent)eventData;
         if(isClient && ID == NetworkManager.Singleton.LocalClientId)
         {
             Debug.Log("Attempting to join game");
 
             matchmaker.JoinMatch(matches[0]);
             
-            Debug.Log(matches[index].matchData["IP"].stringValue);
-            transport.ConnectAddress = matches[index].matchData["IP"].stringValue;
+            Debug.Log(matches[joinEventData.INDEX].matchData["IP"].stringValue);
+            transport.ConnectAddress = matches[joinEventData.INDEX].matchData["IP"].stringValue;
             NetworkManager.Singleton.StartClient();
         }
     }
@@ -77,5 +79,29 @@ public class MatchmakingMenu : MonoBehaviour
                 Debug.LogError("Failed to connect");
             }
         }
+    }
+}
+
+/// <summary>
+/// This struct caries data about a join event
+/// </summary>
+public struct JoinEvent : INetworkSerializable
+{
+    private int index;
+
+    public int INDEX
+    {
+        get => index;
+        private set => index = value;
+    }
+
+    public JoinEvent(int index)
+    {
+        this.index = index;
+    }
+
+    public void NetworkSerialize(NetworkSerializer serializer)
+    {
+        serializer.Serialize(ref index);
     }
 }
