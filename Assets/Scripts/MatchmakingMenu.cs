@@ -31,7 +31,7 @@ public class MatchmakingMenu : MonoBehaviour
     /// </summary>
     void OnJoinStart(ulong ID, bool isClient, INetworkSerializable eventData)
     {
-        JoinEvent joinEventData = (JoinEvent)eventData;
+        JoinEventData joinEventData = eventData as JoinEventData;
         if(isClient && ID == NetworkManager.Singleton.LocalClientId)
         {
             Debug.Log("Attempting to join game");

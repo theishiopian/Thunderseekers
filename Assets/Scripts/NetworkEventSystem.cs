@@ -8,7 +8,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public delegate void GameEvent(ulong ID, bool isClient, INetworkSerializable eventData);
+public delegate void GameEvent(ulong ID, bool isClient, EventData eventData);
 
 /// <summary>
 /// This system is used for communication across the server and the client
@@ -35,7 +35,7 @@ public class NetworkEventSystem: NetworkBehaviour
     /// </summary>
     /// <param name="toInvoke">The key of the event to invoke.</param>
     /// <param name="ID">NetworkID to associate with your event. Can be a ClientID or an ObjectID.</param>
-    public static void Invoke(string toInvoke, ulong ID, INetworkSerializable eventData = null)
+    public static void Invoke(string toInvoke, ulong ID, EventData eventData = null)
     {
         singleton.DoInvoke(toInvoke, ID, eventData);
     }
@@ -56,7 +56,7 @@ public class NetworkEventSystem: NetworkBehaviour
     }
 
     //common invoke for everyone
-    private void DoInvoke(string toInvoke, ulong ID, INetworkSerializable eventData)
+    private void DoInvoke(string toInvoke, ulong ID, EventData eventData)
     {
         if (!IsServer)//is client
         {
@@ -113,16 +113,16 @@ public class NetworkEventSystem: NetworkBehaviour
     }
 
     [ClientRpc()]
-    void ServerToClientRpc(string toInvoke, ulong ID, bool isClient, INetworkSerializable eventData)
+    void ServerToClientRpc(string toInvoke, ulong ID, bool isClient, EventData eventData)
     {
-        events[toInvoke]?.Invoke(ID, isClient, null);
+        events[toInvoke]?.Invoke(ID, isClient, eventData);
     }
 
     [ServerRpc(RequireOwnership = false)]
-    void ClientToServerRpc(string toInvoke, ulong ID, bool isClient, INetworkSerializable eventData)
+    void ClientToServerRpc(string toInvoke, ulong ID, bool isClient, EventData eventData)
     {
-        events[toInvoke]?.Invoke(ID, isClient, null);
-        ServerToClientRpc("test", ID, isClient);
+        events[toInvoke]?.Invoke(ID, isClient, eventData);
+        ServerToClientRpc("test", ID, isClient, eventData);
     }
     #endregion
 }

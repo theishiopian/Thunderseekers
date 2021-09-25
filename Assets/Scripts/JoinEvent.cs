@@ -1,8 +1,8 @@
 using MLAPI.Serialization;
 /// <summary>
-/// This struct caries data about a join event
+/// This class caries data about a join event
 /// </summary>
-public struct JoinEvent : INetworkSerializable
+public class JoinEventData : EventData
 {
     private int index;
 
@@ -12,12 +12,12 @@ public struct JoinEvent : INetworkSerializable
         private set => index = value;
     }
 
-    public JoinEvent(int index)
+    public JoinEventData(int index)
     {
         this.index = index;
     }
 
-    public void NetworkSerialize(NetworkSerializer serializer)
+    public override void NetworkSerialize(NetworkSerializer serializer)
     {
         serializer.Serialize(ref index);
     }
