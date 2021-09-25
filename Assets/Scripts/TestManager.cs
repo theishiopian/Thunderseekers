@@ -6,6 +6,7 @@ using System.Collections.Generic;
 
 public class TestManager : MonoBehaviour
 {
+    [SerializeField]GameObject toEnable;//temporary
     string serverIP = "test";
     void OnGUI()
     {
@@ -26,7 +27,7 @@ public class TestManager : MonoBehaviour
         GUILayout.EndArea();
     }
 
-    static void StartButtons()
+    void StartButtons()
     {
         if (GUILayout.Button("Host"))
         {
@@ -37,11 +38,9 @@ public class TestManager : MonoBehaviour
             NetworkManager.Singleton.GetComponent<Matchmaker>().CreateMatch(12, matchData);
             NetworkManager.Singleton.StartHost();
         }
-        if (GUILayout.Button("Client"))
+        if (GUILayout.Button("Look for match"))
         {
-            Matchmaker matchmaker = NetworkManager.Singleton.GetComponent<Matchmaker>();
-
-            matchmaker.GetMatchList(OnMatch, 0, 10);
+            toEnable.SetActive(true);
         }
         if (GUILayout.Button("Server"))
         {
@@ -58,31 +57,7 @@ public class TestManager : MonoBehaviour
             Application.Quit();
         }
     }
-
-    static void OnMatch(bool success, Match[] matches)
-    {
-        if(success && matches.Length > 0)
-        {
-            Debug.Log("Success");
-            NetworkManager.Singleton.GetComponent<Matchmaker>().JoinMatch(matches[0]);
-            UNetTransport transport = NetworkManager.Singleton.GetComponent<UNetTransport>();
-            Debug.Log(matches[0].matchData["IP"].stringValue);
-            transport.ConnectAddress = matches[0].matchData["IP"].stringValue;
-            NetworkManager.Singleton.StartClient();
-        }
-        else
-        {
-            if(matches.Length > 0)
-            {
-                Debug.LogError("Failed to connect to: " + matches[0].matchData["IP"].stringValue);
-            }
-            else
-            {
-                Debug.LogError("Failed to connect");
-            }
-        }
-    }
-
+    
     static void StatusLabels()
     {
         var mode = NetworkManager.Singleton.IsHost ?

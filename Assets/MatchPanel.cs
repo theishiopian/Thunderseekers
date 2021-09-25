@@ -10,6 +10,8 @@ public class MatchPanel : MonoBehaviour
     public Text serverName;
     public Text numberOfPlayers;
 
+    public int arrayIndex = 0;
+
     // Start is called before the first frame update
     void OnEnable()
     {
@@ -18,6 +20,6 @@ public class MatchPanel : MonoBehaviour
 
     private void Join()
     {
-        NetworkEventSystem.Invoke("start_join", NetworkManager.Singleton.LocalClientId);
+        //NetworkEventSystem.Invoke("start_join", NetworkManager.Singleton.LocalClientId, arrayIndex);
     }
 }
