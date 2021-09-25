@@ -6,7 +6,7 @@ using System.Collections.Generic;
 
 public class TestManager : MonoBehaviour
 {
-    string serverIP = "127.0.0.1";
+    string serverIP = "test";
     void OnGUI()
     {
         GUILayout.BeginArea(new Rect(10, 10, 300, 300));
@@ -46,6 +46,7 @@ public class TestManager : MonoBehaviour
         if (GUILayout.Button("Server"))
         {
             UNetTransport transport = NetworkManager.Singleton.GetComponent<UNetTransport>();
+            transport.ConnectAddress = "127.0.0.1";//TODO: get public IP
             var matchData = new Dictionary<string, MatchData>() {
             { "IP", transport.ConnectAddress },};
 
@@ -62,8 +63,10 @@ public class TestManager : MonoBehaviour
     {
         if(success && matches.Length > 0)
         {
+            Debug.Log("Success");
             NetworkManager.Singleton.GetComponent<Matchmaker>().JoinMatch(matches[0]);
             UNetTransport transport = NetworkManager.Singleton.GetComponent<UNetTransport>();
+            Debug.Log(matches[0].matchData["IP"].stringValue);
             transport.ConnectAddress = matches[0].matchData["IP"].stringValue;
             NetworkManager.Singleton.StartClient();
         }

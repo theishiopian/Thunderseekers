@@ -218,7 +218,6 @@ GameObject:
   - component: {fileID: 1230929748}
   - component: {fileID: 1230929746}
   - component: {fileID: 1230929749}
-  - component: {fileID: 1230929750}
   m_Layer: 0
   m_Name: Manager
   m_TagString: Untagged
@@ -281,24 +280,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f51d99f524ac63a459f4e7f5eb15a95c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &1230929750
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1230929745}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: facb388d7edb36444a88b7c19a38e56e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  matchmakerURL: noblewhale.com
-  matchmakerPort: 20205
-  timeout: 5
-  maxReconnectionAttempts: 5
-  externalIPSource: ipv4.noblewhale.com
-  autoConnect: 1
 --- !u!1 &1317077063
 GameObject:
   m_ObjectHideFlags: 0
@@ -310,6 +291,7 @@ GameObject:
   - component: {fileID: 1317077066}
   - component: {fileID: 1317077065}
   - component: {fileID: 1317077064}
+  - component: {fileID: 1317077067}
   m_Layer: 0
   m_Name: NetworkManager
   m_TagString: Untagged
@@ -410,6 +392,24 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1317077067
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1317077063}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: facb388d7edb36444a88b7c19a38e56e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  matchmakerURL: noblewhale.com
+  matchmakerPort: 20205
+  timeout: 5
+  maxReconnectionAttempts: 5
+  externalIPSource: ipv4.noblewhale.com
+  autoConnect: 1
 --- !u!1 &1670571744
 GameObject:
   m_ObjectHideFlags: 0
@@ -519,7 +519,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &1867306685
 Transform:
   m_ObjectHideFlags: 0
