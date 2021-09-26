@@ -20,7 +20,6 @@ public class MatchPanel : MonoBehaviour
 
     private void Join()
     {
-        Debug.Log("Button");
-        NetworkEventSystem.Invoke("start_join", NetworkManager.Singleton.LocalClientId, new PreJoinEventData(arrayIndex));
+        EventBus.AttemptJoinEvent?.Invoke(NetworkManager.Singleton.LocalClientId, arrayIndex);
     }
 }

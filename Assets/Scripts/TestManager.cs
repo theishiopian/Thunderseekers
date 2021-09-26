@@ -72,11 +72,12 @@ public class TestManager : MonoBehaviour
 
     private void Start()
     {
-        NetworkEventSystem.RegisterListner("client_join", OnJoin);
+        NetworkManager.Singleton.OnClientConnectedCallback += (ID) => EventBus.ClientConnectEvent?.Invoke(ID);
+        EventBus.ClientConnectEvent += OnClientJoin;
     }
 
-    private void OnJoin(ulong ID, bool isClient, AbstractEventData eventData)
+    private void OnClientJoin(ulong ID, params object[] p)
     {
-        Debug.Log("join " + isClient);
+        Debug.Log("Client joined with ID: " + ID);
     }
 }

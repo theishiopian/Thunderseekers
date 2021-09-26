@@ -20,7 +20,8 @@ public class MatchmakingMenu : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        NetworkEventSystem.RegisterListner("start_join", OnJoinStart);
+        //NetworkEventSystem.RegisterListner("start_join", OnJoinStart);
+        EventBus.AttemptJoinEvent += OnJoinStart;
         matchmaker = NetworkManager.Singleton.GetComponent<Matchmaker>();
         matchmaker.GetMatchList(OnGetMatchList, 0, 10);
         transport = NetworkManager.Singleton.GetComponent<UNetTransport>();
@@ -29,18 +30,15 @@ public class MatchmakingMenu : MonoBehaviour
     /// <summary>
     /// Use this to join a game. The first parameter should be the index of the match array to use
     /// </summary>
-    void OnJoinStart(ulong ID, bool isClient, INetworkSerializable eventData)
+    void OnJoinStart(ulong ID, params object[] p)
     {
-        PreJoinEventData preJoinEventData = eventData as PreJoinEventData;
-        if (isClient && ID == NetworkManager.Singleton.LocalClientId)
-        {
-            matchmaker.JoinMatch(matches[0]);
-
-            transport.ConnectAddress = matches[preJoinEventData.INDEX].matchData["IP"].stringValue;
-            NetworkManager.Singleton.StartClient();
-            NetworkEventSystem.Invoke("client_join", NetworkManager.Singleton.LocalClientId);
-            gameObject.SetActive(false);
-        }
+        matchmaker.JoinMatch(matches[0]);
+        //p[0] is the index of the match array to use
+        int i = (int)p[0];
+        Match m = matches[i];
+        transport.ConnectAddress = m.matchData["IP"].stringValue;
+        NetworkManager.Singleton.StartClient();
+        gameObject.SetActive(false);
     }
 
     /// <summary>
