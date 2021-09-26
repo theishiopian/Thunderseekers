@@ -45,7 +45,8 @@ public class TestManager : MonoBehaviour
         if (GUILayout.Button("Server"))
         {
             UNetTransport transport = NetworkManager.Singleton.GetComponent<UNetTransport>();
-            transport.ConnectAddress = "127.0.0.1";//TODO: get public IP
+            //transport.ConnectAddress = "127.0.0.1";//TODO: get public IP'
+            transport.ConnectAddress = IPManager.GetIP(ADDRESSFAM.IPv4);
             var matchData = new Dictionary<string, MatchData>() {
             { "IP", transport.ConnectAddress },};
 
