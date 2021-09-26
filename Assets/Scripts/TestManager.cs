@@ -69,4 +69,14 @@ public class TestManager : MonoBehaviour
 
         if (GUILayout.Button("Close")) Application.Quit();
     }
+
+    private void Start()
+    {
+        NetworkEventSystem.RegisterListner("client_join", OnJoin);
+    }
+
+    private void OnJoin(ulong ID, bool isClient, AbstractEventData eventData)
+    {
+        Debug.Log("join " + isClient);
+    }
 }

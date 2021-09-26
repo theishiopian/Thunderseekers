@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 5931091247872462664}
   - component: {fileID: 971083711281596634}
   - component: {fileID: 1277310128747633351}
+  - component: {fileID: 8945670324442634387}
   m_Layer: 0
   m_Name: Mech
   m_TagString: Untagged
@@ -60,6 +61,18 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 683407be3f777a94385ab601ef238201, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &8945670324442634387
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3890796742678773519}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bc28f1e9ad3bc324c93eb4f35f00d1d5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1 &4386394843796379834

@@ -8,7 +8,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public delegate void GameEvent(ulong ID, bool isClient, EventData eventData);
+public delegate void GameEvent(ulong ID, bool isClient, AbstractEventData eventData);
 
 /// <summary>
 /// This system is used for communication across the server and the client
@@ -20,22 +20,46 @@ public delegate void GameEvent(ulong ID, bool isClient, EventData eventData);
 /// Keep this in mind when writing code that needs to run on a host
 /// </summary>
 [RequireComponent(typeof(NetworkObject))]
-public class NetworkEventSystem: NetworkBehaviour
+public class NetworkEventSystem : NetworkBehaviour
 {
-    public static event GameEvent onJoinPre;
+    private static event GameEvent onJoinPre;
+    private static event GameEvent onJoinStart;
+    private static event GameEvent onJoin;
     private static Dictionary<string, GameEvent> events = new Dictionary<string, GameEvent>()
     {
-        {"start_join", onJoinPre}
+        {"start_join", onJoinPre},//client
+        {"client_join", onJoinStart},//client
+        {"client_join_success", onJoin}//both
     };
 
     private static NetworkEventSystem singleton;
+
+    private void Awake()
+    {
+        singleton = this;
+
+        NetworkManager.Singleton.OnClientConnectedCallback += (ID) =>
+        {
+            if(NetworkManager.Singleton.IsServer)
+            {
+                Invoke("client_join_success", ID);
+            }
+        };
+
+        RegisterListner("client_join_success", OnJoinComplete);
+    }
+
+    void OnJoinComplete(ulong ID, bool isClient, AbstractEventData eventData)
+    {
+        Debug.Log(isClient);
+    }
 
     /// <summary>
     /// This method is used to invoke an event. Syncs across client and server, if it can.
     /// </summary>
     /// <param name="toInvoke">The key of the event to invoke.</param>
     /// <param name="ID">NetworkID to associate with your event. Can be a ClientID or an ObjectID.</param>
-    public static void Invoke(string toInvoke, ulong ID, EventData eventData = null)
+    public static void Invoke(string toInvoke, ulong ID, AbstractEventData eventData = null)
     {
         singleton.DoInvoke(toInvoke, ID, eventData);
     }
@@ -50,13 +74,8 @@ public class NetworkEventSystem: NetworkBehaviour
         events[eventName] += listner;
     }
 
-    private void Awake()
-    {
-        singleton = this;
-    }
-
     //common invoke for everyone
-    private void DoInvoke(string toInvoke, ulong ID, EventData eventData)
+    private void DoInvoke(string toInvoke, ulong ID, AbstractEventData eventData)
     {
         if (!IsServer)//is client
         {
@@ -64,11 +83,11 @@ public class NetworkEventSystem: NetworkBehaviour
             {
                 if(eventData == null)
                 {
-                    ClientToServerRpc(toInvoke, ID, true);//this will send it back
+                    ClientToServerRpc(toInvoke, ID);//this will send it back
                 }
                 else
                 {
-                    ClientToServerRpc(toInvoke, ID, true, eventData);
+                    ClientToServerRpc(toInvoke, ID, eventData);
                 }
             }
             else
@@ -82,8 +101,8 @@ public class NetworkEventSystem: NetworkBehaviour
 
             if (NetworkManager.Singleton.ConnectedClients.Count > 0)
             {
-                if(eventData == null)ServerToClientRpc(toInvoke, ID, true);
-                else ServerToClientRpc(toInvoke, ID, true, eventData);
+                if(eventData == null)ServerToClientRpc(toInvoke, ID);
+                else ServerToClientRpc(toInvoke, ID, eventData);
             }    
         }
         else//is server
@@ -92,37 +111,38 @@ public class NetworkEventSystem: NetworkBehaviour
 
             if(NetworkManager.Singleton.ConnectedClients.Count > 0)
             {
-                if (eventData == null) ServerToClientRpc(toInvoke, ID, true);
-                else ServerToClientRpc(toInvoke, ID, true, eventData);
+                if (eventData == null) ServerToClientRpc(toInvoke, ID);
+                else ServerToClientRpc(toInvoke, ID, eventData);
             }
         }
     }
 
     #region RPC
     [ClientRpc()]
-    void ServerToClientRpc(string toInvoke, ulong ID, bool isClient)
+    void ServerToClientRpc(string toInvoke, ulong ID)
     {
-        events[toInvoke]?.Invoke(ID, isClient, null);
+        events[toInvoke]?.Invoke(ID, true, null);//invokes clientside
     }
 
     [ServerRpc(RequireOwnership = false)]
-    void ClientToServerRpc(string toInvoke, ulong ID, bool isClient)
+    void ClientToServerRpc(string toInvoke, ulong ID)
     {
-        events[toInvoke]?.Invoke(ID, isClient, null);
-        ServerToClientRpc("test", ID, isClient);
+        Debug.Log("RPC");
+        events[toInvoke]?.Invoke(ID, false, null);//invokes serverside
+        ServerToClientRpc(toInvoke, ID);//sends to client
     }
 
     [ClientRpc()]
-    void ServerToClientRpc(string toInvoke, ulong ID, bool isClient, EventData eventData)
+    void ServerToClientRpc(string toInvoke, ulong ID, AbstractEventData eventData)
     {
-        events[toInvoke]?.Invoke(ID, isClient, eventData);
+        events[toInvoke]?.Invoke(ID, true, eventData);//invokes on client
     }
 
     [ServerRpc(RequireOwnership = false)]
-    void ClientToServerRpc(string toInvoke, ulong ID, bool isClient, EventData eventData)
+    void ClientToServerRpc(string toInvoke, ulong ID, AbstractEventData eventData)
     {
-        events[toInvoke]?.Invoke(ID, isClient, eventData);
-        ServerToClientRpc("test", ID, isClient, eventData);
+        events[toInvoke]?.Invoke(ID, false, eventData);//invokes serverside
+        ServerToClientRpc(toInvoke, ID, eventData);
     }
     #endregion
 }

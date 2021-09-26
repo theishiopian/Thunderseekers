@@ -2,7 +2,7 @@ using MLAPI.Serialization;
 /// <summary>
 /// This class caries data about a join event
 /// </summary>
-public class JoinEventData : EventData
+public class PreJoinEventData : AbstractEventData
 {
     private int index;
 
@@ -12,7 +12,7 @@ public class JoinEventData : EventData
         private set => index = value;
     }
 
-    public JoinEventData(int index)
+    public PreJoinEventData(int index)
     {
         this.index = index;
     }

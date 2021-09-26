@@ -31,16 +31,24 @@ public class MatchmakingMenu : MonoBehaviour
     /// </summary>
     void OnJoinStart(ulong ID, bool isClient, INetworkSerializable eventData)
     {
-        JoinEventData joinEventData = eventData as JoinEventData;
-        if(isClient && ID == NetworkManager.Singleton.LocalClientId)
+        Debug.Log("OnJoinStart");
+        PreJoinEventData preJoinEventData = eventData as PreJoinEventData;
+        Debug.Log(isClient);//should be true
+        Debug.Log(ID == NetworkManager.Singleton.LocalClientId);//should be true
+        Debug.Log(ID);
+        Debug.Log(NetworkManager.Singleton.LocalClientId);
+        if (isClient && ID == NetworkManager.Singleton.LocalClientId)
         {
             Debug.Log("Attempting to join game");
-
+            Debug.Log(matchmaker);
+            Debug.Log(matches);
             matchmaker.JoinMatch(matches[0]);
-            
-            Debug.Log(matches[joinEventData.INDEX].matchData["IP"].stringValue);
-            transport.ConnectAddress = matches[joinEventData.INDEX].matchData["IP"].stringValue;
+
+            Debug.Log(matches[preJoinEventData.INDEX].matchData["IP"].stringValue);
+            transport.ConnectAddress = matches[preJoinEventData.INDEX].matchData["IP"].stringValue;
             NetworkManager.Singleton.StartClient();
+            NetworkEventSystem.Invoke("client_join", NetworkManager.Singleton.LocalClientId);
+            gameObject.SetActive(false);
         }
     }
 
@@ -51,7 +59,7 @@ public class MatchmakingMenu : MonoBehaviour
     /// <param name="matches"></param>
     void OnGetMatchList(bool success, Match[] matches)
     {
-        if (success && matches.Length > 0)
+        if (success)
         {
             Debug.Log("Success");
             this.matches = matches;
@@ -60,7 +68,9 @@ public class MatchmakingMenu : MonoBehaviour
             {
                 for(int index = 0; index != matches.Length; index++)
                 {
-                    Instantiate(matchPanelPrefab, panelParent).GetComponent<MatchPanel>().arrayIndex = index;
+                    GameObject b = Instantiate(matchPanelPrefab, panelParent);
+                    MatchPanel p = b.GetComponent<MatchPanel>();
+                    p.arrayIndex = index;
                 }
             }
             else
