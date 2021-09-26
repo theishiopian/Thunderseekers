@@ -38,20 +38,21 @@ public class NetworkEventSystem : NetworkBehaviour
     {
         singleton = this;
 
+        RegisterListner("client_join_success", OnJoinComplete);
+
         NetworkManager.Singleton.OnClientConnectedCallback += (ID) =>
         {
-            if(NetworkManager.Singleton.IsServer)
+            if(NetworkManager.Singleton.IsServer || NetworkManager.Singleton.IsHost)
             {
-                Invoke("client_join_success", ID);
+                Invoke("client_join_success", ID, new JoinSuccessEventData("hello"));
             }
         };
-
-        RegisterListner("client_join_success", OnJoinComplete);
     }
 
     void OnJoinComplete(ulong ID, bool isClient, AbstractEventData eventData)
     {
-        Debug.Log(isClient);
+        JoinSuccessEventData data = eventData as JoinSuccessEventData;
+        Debug.Log(isClient + data.MESSAGE);
     }
 
     /// <summary>
@@ -121,13 +122,14 @@ public class NetworkEventSystem : NetworkBehaviour
     [ClientRpc()]
     void ServerToClientRpc(string toInvoke, ulong ID)
     {
+        Debug.Log("NULL CALL: " + toInvoke);
         events[toInvoke]?.Invoke(ID, true, null);//invokes clientside
     }
 
     [ServerRpc(RequireOwnership = false)]
     void ClientToServerRpc(string toInvoke, ulong ID)
     {
-        Debug.Log("RPC");
+        Debug.Log("NULL CALL: " + toInvoke);
         events[toInvoke]?.Invoke(ID, false, null);//invokes serverside
         ServerToClientRpc(toInvoke, ID);//sends to client
     }

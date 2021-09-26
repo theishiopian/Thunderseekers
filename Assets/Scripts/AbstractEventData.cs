@@ -5,6 +5,11 @@ using UnityEngine;
 
 public abstract class AbstractEventData : INetworkSerializable
 {
+    public AbstractEventData()
+    {
+
+    }
+
     public virtual void NetworkSerialize(NetworkSerializer serializer)
     {
     }

@@ -31,20 +31,11 @@ public class MatchmakingMenu : MonoBehaviour
     /// </summary>
     void OnJoinStart(ulong ID, bool isClient, INetworkSerializable eventData)
     {
-        Debug.Log("OnJoinStart");
         PreJoinEventData preJoinEventData = eventData as PreJoinEventData;
-        Debug.Log(isClient);//should be true
-        Debug.Log(ID == NetworkManager.Singleton.LocalClientId);//should be true
-        Debug.Log(ID);
-        Debug.Log(NetworkManager.Singleton.LocalClientId);
         if (isClient && ID == NetworkManager.Singleton.LocalClientId)
         {
-            Debug.Log("Attempting to join game");
-            Debug.Log(matchmaker);
-            Debug.Log(matches);
             matchmaker.JoinMatch(matches[0]);
 
-            Debug.Log(matches[preJoinEventData.INDEX].matchData["IP"].stringValue);
             transport.ConnectAddress = matches[preJoinEventData.INDEX].matchData["IP"].stringValue;
             NetworkManager.Singleton.StartClient();
             NetworkEventSystem.Invoke("client_join", NetworkManager.Singleton.LocalClientId);

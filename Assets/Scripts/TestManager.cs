@@ -7,7 +7,7 @@ using System.Collections.Generic;
 public class TestManager : MonoBehaviour
 {
     [SerializeField]GameObject toEnable;//temporary
-    string serverIP = "test";
+    string serverIP = "test";//reset on the fly
     void OnGUI()
     {
         GUILayout.BeginArea(new Rect(10, 10, 300, 300));
