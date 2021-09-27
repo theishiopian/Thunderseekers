@@ -32,11 +32,12 @@ public class MatchmakingMenu : MonoBehaviour
     /// </summary>
     void OnJoinStart(ulong ID, params object[] p)
     {
-        matchmaker.JoinMatch(matches[0]);
-        //p[0] is the index of the match array to use
         int i = (int)p[0];
+        matchmaker.JoinMatch(matches[i]);
         Match m = matches[i];
-        transport.ConnectAddress = m.matchData["IP"].stringValue;
+        string ip = m.matchData["IP"].stringValue;
+        
+        NetworkManager.Singleton.GetComponent<UNetTransport>().ConnectAddress = ip;
         NetworkManager.Singleton.StartClient();
         gameObject.SetActive(false);
     }
@@ -60,6 +61,7 @@ public class MatchmakingMenu : MonoBehaviour
                     GameObject b = Instantiate(matchPanelPrefab, panelParent);
                     MatchPanel p = b.GetComponent<MatchPanel>();
                     p.arrayIndex = index;
+                    p.serverName.text = matches[index].matchData["IP"].stringValue;
                 }
             }
             else

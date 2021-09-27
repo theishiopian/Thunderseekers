@@ -290,6 +290,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   JoinMatch: {fileID: 7369516821703194084}
-  serverName: {fileID: 0}
+  serverName: {fileID: 7369516822600579348}
   numberOfPlayers: {fileID: 0}
   arrayIndex: 0
