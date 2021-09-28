@@ -6,6 +6,9 @@ using MatchUp;
 using System.Collections.Generic;
 using System.Collections;
 using System.Text.RegularExpressions;
+using MLAPI.Puncher.Server;
+using System.Net;
+using MLAPI.Puncher.Client;
 
 public class TestManager : MonoBehaviour
 {
@@ -27,6 +30,29 @@ public class TestManager : MonoBehaviour
         GUILayout.EndArea();
     }
 
+    void StartMatch()
+    {
+        UNetTransport transport = NetworkManager.Singleton.GetComponent<UNetTransport>();
+
+        var matchData = new Dictionary<string, MatchData>() {
+                { "IP", transport.ConnectAddress },};
+
+        NetworkManager.Singleton.GetComponent<Matchmaker>().CreateMatch(12, matchData);
+
+        PuncherServer server = new PuncherServer();
+        // 6776 is the port of the NAT server. Can be changed.
+        server.Start(new IPEndPoint(IPAddress.Any, 6776));
+
+        // Creates the listener with the address and port of the server.
+        // Disposal stops everything and closes the connection.
+        using (PuncherClient listener = new PuncherClient("puncher.midlevel.io", 6776))
+        {
+            // 1234 is the port where the other peer will connect and punch through.
+            // That would be the port where your program is going to be listening after the punch is done.
+            listener.ListenForSinglePunch(new IPEndPoint(IPAddress.Any, 1234));
+        }
+    }
+
     void StartButtons()
     {
         if(hasIP)
@@ -37,22 +63,12 @@ public class TestManager : MonoBehaviour
             }
             if (GUILayout.Button("Host"))
             {
-                UNetTransport transport = NetworkManager.Singleton.GetComponent<UNetTransport>();
-
-                var matchData = new Dictionary<string, MatchData>() {
-                { "IP", transport.ConnectAddress },};
-
-                NetworkManager.Singleton.GetComponent<Matchmaker>().CreateMatch(12, matchData);
+                StartMatch();
                 NetworkManager.Singleton.StartHost();
             }
             if (GUILayout.Button("Server"))
             {
-                UNetTransport transport = NetworkManager.Singleton.GetComponent<UNetTransport>();
-
-                var matchData = new Dictionary<string, MatchData>() {
-                { "IP", transport.ConnectAddress },};
-
-                NetworkManager.Singleton.GetComponent<Matchmaker>().CreateMatch(12, matchData);
+                StartMatch();
                 NetworkManager.Singleton.StartServer();
             }
             if (GUILayout.Button("Close"))

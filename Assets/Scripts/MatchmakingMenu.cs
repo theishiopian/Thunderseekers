@@ -5,6 +5,8 @@ using MLAPI;
 using MatchUp;
 using MLAPI.Transports.UNET;
 using MLAPI.Serialization;
+using MLAPI.Puncher.Client;
+using System.Net;
 
 public class MatchmakingMenu : MonoBehaviour
 {
@@ -37,9 +39,31 @@ public class MatchmakingMenu : MonoBehaviour
         Match m = matches[i];
         string ip = m.matchData["IP"].stringValue;
         
-        NetworkManager.Singleton.GetComponent<UNetTransport>().ConnectAddress = ip;
-        NetworkManager.Singleton.StartClient();
-        gameObject.SetActive(false);
+        
+
+        // Get listener public IP address by means of a matchmaker or otherwise.
+        string listenerAddress = ip;
+
+        // Creates the connector with the address and port to the server.
+        // Disposal stops everything and closes the connection.
+        using (PuncherClient connector = new PuncherClient("puncher.midlevel.io", 6776))
+        {
+            // Punches and returns the result
+            if (connector.TryPunch(IPAddress.Parse(listenerAddress), out IPEndPoint remoteEndPoint))
+            {
+                // NAT Punchthrough was successful. It can now be connected to using your normal connection logic.
+                NetworkManager.Singleton.GetComponent<UNetTransport>().ConnectAddress = remoteEndPoint.Address.ToString();
+
+                NetworkManager.Singleton.StartClient();
+                gameObject.SetActive(false);
+            }
+            else
+            {
+                // NAT Punchthrough failed.
+                Debug.Log("punching failed");
+            }
+        }
+        
     }
 
     /// <summary>
