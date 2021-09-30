@@ -1905,7 +1905,8 @@ MonoBehaviour:
   manualConnect: {fileID: 531402560}
   serverBrowser: {fileID: 986423462}
   settingsMenu: {fileID: 57536800}
-  matchListAnchor: {fileID: 0}
+  hostMenu: {fileID: 246999839}
+  matchListAnchor: {fileID: 1900015947}
   ipInput: {fileID: 1085916104}
   portInput: {fileID: 225515958}
   volumeSlider: {fileID: 373614628}

@@ -12,6 +12,7 @@ public class Menu : MonoBehaviour
     public GameObject manualConnect;
     public GameObject serverBrowser;
     public GameObject settingsMenu;
+    public GameObject hostMenu;
     public RectTransform matchListAnchor;
 
     [Header("Input Objects")]
@@ -41,6 +42,7 @@ public class Menu : MonoBehaviour
         manualConnect.SetActive(false);
         serverBrowser.SetActive(false);
         settingsMenu.SetActive(false);
+        hostMenu.SetActive(false);
 
         if(!PlayerPrefs.HasKey("volume"))
         {
