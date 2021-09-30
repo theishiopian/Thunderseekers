@@ -27,7 +27,7 @@ public class Menu : MonoBehaviour
     public Scrollbar browseScroll;
 
     [Header("Network")]
-    public string IP;
+    public string IP = "0.0.0.0";
     public string port = "15490";
     public string natIP = "108.166.222.106";
     public string natPort = "15491";
@@ -68,10 +68,23 @@ public class Menu : MonoBehaviour
         if(read)
         {
             IP = ipInput.text;
-            port = portInput.text;
+            this.port = portInput.text;
         }
 
-        Debug.Log("Attemtping to connect to: " + IP + ":" + port);
+        Debug.Log("Attemtping to connect to: " + IP + ":" + this.port);
+
+        ushort port;
+        if (!ushort.TryParse(this.port, out port))
+        {
+            Debug.LogError("The supplied port number is not within the allowed range 0-" + ushort.MaxValue);
+            return;
+        }
+
+        NetWorker client = new UDPClient();
+
+        ((UDPClient)client).Connect(IP, port, natIP, ushort.Parse(natPort));
+
+        Connected(client);
     }
 
     /// <summary>
