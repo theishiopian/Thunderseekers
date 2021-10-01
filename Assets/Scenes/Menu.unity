@@ -1504,10 +1504,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: NetworkManager Variant
       objectReference: {fileID: 0}
-    - target: {fileID: 8494952037274966805, guid: 576a6dc7becbfd6449ecc340bb7fc143, type: 3}
-      propertyPath: GameManagerNetworkObject.Array.data[0]
-      value: 
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 576a6dc7becbfd6449ecc340bb7fc143, type: 3}
 --- !u!1 &531402560

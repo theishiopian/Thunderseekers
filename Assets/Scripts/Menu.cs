@@ -131,6 +131,7 @@ public class Menu : MonoBehaviour
         //TODO: add master server
 
         manager.Initialize(server);
+        EventBus.serverStarted?.Invoke();
 
         if(server is IServer)
         {
