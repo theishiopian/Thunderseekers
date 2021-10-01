@@ -45,6 +45,7 @@ public class Menu : MonoBehaviour
     void Start()
     {
         Singleton = this;
+        manager = NetworkManager.Instance;
         mainMenu.SetActive(true);
         manualConnect.SetActive(false);
         serverBrowser.SetActive(false);
@@ -121,9 +122,9 @@ public class Menu : MonoBehaviour
             return;
         }
 
-        Debug.Log("Generating Network Manager");
-        GameObject managerObject = new GameObject("Network Manager");
-        manager = managerObject.AddComponent<NetworkManager>();
+        //Debug.Log("Generating Network Manager");
+        //GameObject managerObject = new GameObject("Network Manager");
+        //manager = managerObject.AddComponent<NetworkManager>();
 
         // If we are using the master server we need to get the registration data
         //JSONNode masterServerData = manager.MasterServerRegisterData(server, "tsGame", serverName.te);

@@ -96,7 +96,7 @@ public class Player : PlayerBehavior
     {
         if(state == PlayerState.WALKING)
         {
-            Vector3 move = transform.TransformDirection(networkObject.move_input * walkSpeed);
+            Vector3 move = transform.TransformDirection(networkObject.moveinput * walkSpeed);
             collisionInfo = controller.Move(move);
 
             networkObject.position = transform.position;
@@ -111,9 +111,9 @@ public class Player : PlayerBehavior
     {
         if(state == PlayerState.DRIVING)
         {
-            transform.RotateAround(transform.position, Vector3.up, networkObject.move_input.x * turnSpeed);
+            transform.RotateAround(transform.position, Vector3.up, networkObject.moveinput.x * turnSpeed);
 
-            Vector3 move = transform.TransformDirection(networkObject.move_input.y * driveSpeed * Vector3.forward);
+            Vector3 move = transform.TransformDirection(networkObject.moveinput.y * driveSpeed * Vector3.forward);
             collisionInfo = controller.Move(move);
 
             networkObject.position = transform.position;
@@ -169,7 +169,7 @@ public class Player : PlayerBehavior
         moveInput.x = Input.GetAxis("Horizontal");
         moveInput.y = Input.GetAxis("Vertical");
 
-        networkObject.move_input = moveInput;
+        networkObject.moveinput = moveInput;
 
         lookInput.x = Input.GetAxis("Mouse X");
         lookInput.y = Input.GetAxis("Mouse Y");

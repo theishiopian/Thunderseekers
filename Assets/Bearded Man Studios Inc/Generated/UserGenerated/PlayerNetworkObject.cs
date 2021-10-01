@@ -8,7 +8,7 @@ namespace BeardedManStudios.Forge.Networking.Generated
 	[GeneratedInterpol("{\"inter\":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]")]
 	public partial class PlayerNetworkObject : NetworkObject
 	{
-		public const int IDENTITY = 2;
+		public const int IDENTITY = 3;
 
 		private byte[] _dirtyFields = new byte[3];
 
@@ -264,35 +264,35 @@ namespace BeardedManStudios.Forge.Networking.Generated
 			if (fieldAltered != null) fieldAltered("flares", _flares, timestep);
 		}
 		[ForgeGeneratedField]
-		private Vector2 _move_input;
-		public event FieldEvent<Vector2> move_inputChanged;
-		public InterpolateVector2 move_inputInterpolation = new InterpolateVector2() { LerpT = 0f, Enabled = false };
-		public Vector2 move_input
+		private Vector2 _moveinput;
+		public event FieldEvent<Vector2> moveinputChanged;
+		public InterpolateVector2 moveinputInterpolation = new InterpolateVector2() { LerpT = 0f, Enabled = false };
+		public Vector2 moveinput
 		{
-			get { return _move_input; }
+			get { return _moveinput; }
 			set
 			{
 				// Don't do anything if the value is the same
-				if (_move_input == value)
+				if (_moveinput == value)
 					return;
 
 				// Mark the field as dirty for the network to transmit
 				_dirtyFields[1] |= 0x1;
-				_move_input = value;
+				_moveinput = value;
 				hasDirtyFields = true;
 			}
 		}
 
-		public void Setmove_inputDirty()
+		public void SetmoveinputDirty()
 		{
 			_dirtyFields[1] |= 0x1;
 			hasDirtyFields = true;
 		}
 
-		private void RunChange_move_input(ulong timestep)
+		private void RunChange_moveinput(ulong timestep)
 		{
-			if (move_inputChanged != null) move_inputChanged(_move_input, timestep);
-			if (fieldAltered != null) fieldAltered("move_input", _move_input, timestep);
+			if (moveinputChanged != null) moveinputChanged(_moveinput, timestep);
+			if (fieldAltered != null) fieldAltered("moveinput", _moveinput, timestep);
 		}
 		[ForgeGeneratedField]
 		private Vector2 _aim;
@@ -621,7 +621,7 @@ namespace BeardedManStudios.Forge.Networking.Generated
 			tertiaryfireInterpolation.current = tertiaryfireInterpolation.target;
 			dodgeInterpolation.current = dodgeInterpolation.target;
 			flaresInterpolation.current = flaresInterpolation.target;
-			move_inputInterpolation.current = move_inputInterpolation.target;
+			moveinputInterpolation.current = moveinputInterpolation.target;
 			aimInterpolation.current = aimInterpolation.target;
 			movetoggleInterpolation.current = movetoggleInterpolation.target;
 			mapzoomtoggleInterpolation.current = mapzoomtoggleInterpolation.target;
@@ -646,7 +646,7 @@ namespace BeardedManStudios.Forge.Networking.Generated
 			UnityObjectMapper.Instance.MapBytes(data, _tertiaryfire);
 			UnityObjectMapper.Instance.MapBytes(data, _dodge);
 			UnityObjectMapper.Instance.MapBytes(data, _flares);
-			UnityObjectMapper.Instance.MapBytes(data, _move_input);
+			UnityObjectMapper.Instance.MapBytes(data, _moveinput);
 			UnityObjectMapper.Instance.MapBytes(data, _aim);
 			UnityObjectMapper.Instance.MapBytes(data, _movetoggle);
 			UnityObjectMapper.Instance.MapBytes(data, _mapzoomtoggle);
@@ -695,10 +695,10 @@ namespace BeardedManStudios.Forge.Networking.Generated
 			flaresInterpolation.current = _flares;
 			flaresInterpolation.target = _flares;
 			RunChange_flares(timestep);
-			_move_input = UnityObjectMapper.Instance.Map<Vector2>(payload);
-			move_inputInterpolation.current = _move_input;
-			move_inputInterpolation.target = _move_input;
-			RunChange_move_input(timestep);
+			_moveinput = UnityObjectMapper.Instance.Map<Vector2>(payload);
+			moveinputInterpolation.current = _moveinput;
+			moveinputInterpolation.target = _moveinput;
+			RunChange_moveinput(timestep);
 			_aim = UnityObjectMapper.Instance.Map<Vector2>(payload);
 			aimInterpolation.current = _aim;
 			aimInterpolation.target = _aim;
@@ -763,7 +763,7 @@ namespace BeardedManStudios.Forge.Networking.Generated
 			if ((0x80 & _dirtyFields[0]) != 0)
 				UnityObjectMapper.Instance.MapBytes(dirtyFieldsData, _flares);
 			if ((0x1 & _dirtyFields[1]) != 0)
-				UnityObjectMapper.Instance.MapBytes(dirtyFieldsData, _move_input);
+				UnityObjectMapper.Instance.MapBytes(dirtyFieldsData, _moveinput);
 			if ((0x2 & _dirtyFields[1]) != 0)
 				UnityObjectMapper.Instance.MapBytes(dirtyFieldsData, _aim);
 			if ((0x4 & _dirtyFields[1]) != 0)
@@ -906,15 +906,15 @@ namespace BeardedManStudios.Forge.Networking.Generated
 			}
 			if ((0x1 & readDirtyFlags[1]) != 0)
 			{
-				if (move_inputInterpolation.Enabled)
+				if (moveinputInterpolation.Enabled)
 				{
-					move_inputInterpolation.target = UnityObjectMapper.Instance.Map<Vector2>(data);
-					move_inputInterpolation.Timestep = timestep;
+					moveinputInterpolation.target = UnityObjectMapper.Instance.Map<Vector2>(data);
+					moveinputInterpolation.Timestep = timestep;
 				}
 				else
 				{
-					_move_input = UnityObjectMapper.Instance.Map<Vector2>(data);
-					RunChange_move_input(timestep);
+					_moveinput = UnityObjectMapper.Instance.Map<Vector2>(data);
+					RunChange_moveinput(timestep);
 				}
 			}
 			if ((0x2 & readDirtyFlags[1]) != 0)
@@ -1094,10 +1094,10 @@ namespace BeardedManStudios.Forge.Networking.Generated
 				_flares = (bool)flaresInterpolation.Interpolate();
 				//RunChange_flares(flaresInterpolation.Timestep);
 			}
-			if (move_inputInterpolation.Enabled && !move_inputInterpolation.current.UnityNear(move_inputInterpolation.target, 0.0015f))
+			if (moveinputInterpolation.Enabled && !moveinputInterpolation.current.UnityNear(moveinputInterpolation.target, 0.0015f))
 			{
-				_move_input = (Vector2)move_inputInterpolation.Interpolate();
-				//RunChange_move_input(move_inputInterpolation.Timestep);
+				_moveinput = (Vector2)moveinputInterpolation.Interpolate();
+				//RunChange_moveinput(moveinputInterpolation.Timestep);
 			}
 			if (aimInterpolation.Enabled && !aimInterpolation.current.UnityNear(aimInterpolation.target, 0.0015f))
 			{
